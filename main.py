@@ -245,19 +245,11 @@ def gddml(xyz):
 
     #predict values
     model = joblib.load(path + '/gddML.pkl')
-    gdd = int(round(model.predict(df)[0], 0))
+    gdd = int(round(model.predict(df)[0], 0)) * 0.001
 
     return name, gdd
 
 
-# geom_dir = '/home/corev/project_gdd2/xyz_all/'
-# for i in os.listdir(geom_dir):
-#    if i.endswith('.xyz') and 'PB' in i:
-#        name = i[:-4]
-#        print(name)
-#        (gddml(geom_dir+i, True))
-
 if __name__ == '__main__':
-    # print(gddml('/home/corev/project_gdd/datasets/xyz_all/PT-2.xyz'))
     res = gddml(str(sys.argv[1]))
     print(res[0], res[1])
