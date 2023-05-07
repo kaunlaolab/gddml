@@ -9,7 +9,8 @@ If provided a system in the XYZ format, the model will rely on xyz2mol (https://
 charge=1=
 ```
 For more information on xyz2mol, please see the related article at DOI:10.1002/bkcs.10334
-For complexe systems or if it conatains multiple charges, using a SDF file is recommended ensure this program performs to the best of its ability, as this format ensures proper placement of charges or bonds, and can be used directly by RDKit without preprocessing by xyz2mol which represents the bottleneck of this code.
+
+For complexe systems or if the system contains multiple charges, using a SDF file is recommended to ensure this program performs to the best of its ability. The SDF format ensures proper placement of charges or bonds, and can be used directly by RDKit without preprocessing by xyz2mol which represents the bottleneck of this code.
 
 
 ## Running the code.
