@@ -12,7 +12,7 @@ For more information on xyz2mol, please see the related article at DOI:10.1002/b
 
 ## Running the code.
 
-This code requires a conda installation. then install the environment:
+This code requires a conda installation. Then install the environment using the .yml contained within the directory:
 ```
 conda create -n YOUR_ENV_NAME -f environment.yml
 ```
@@ -23,4 +23,4 @@ Once the environment is installed, activate it and run the code:
  python3 main.py C60.xyz
  ```
  
- Note that the C60 molecule is given as example, but any xyz file will do.
+ Note that the C60 molecule is given as example, but any path to an XYZ or SDF file will work.
