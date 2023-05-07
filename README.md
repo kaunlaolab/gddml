@@ -14,9 +14,9 @@ For complexe systems or if it conatains multiple charges, using a SDF file is re
 
 ## Running the code.
 
-This code requires a conda installation. Then install the environment using the .yml contained within the directory:
+This code requires a conda installation. Then install the environment using the .yml file contained within the directory:
 ```
-conda create -n YOUR_ENV_NAME -f environment.yml
+conda env create -n YOUR_ENV_NAME -f environment.yml
 ```
 
 Once the environment is installed, activate it and run the code:
