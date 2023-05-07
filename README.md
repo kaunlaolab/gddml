@@ -4,11 +4,13 @@ This machine learning model enable fast prediction of the range-separation param
 
 The details of this code can be found in the work of DOI:
 
-To ensure this program performs to the best of its ability, using a SDF file is recommended as this format provides the best descriptions of the system and ensure proper placement of charges or bonds, and can be used directly to generate the necessary features. If provided a system in the XYZ format, the model will rely on xyz2mol (https://github.com/jensengroup/xyz2mol) to obtain an RDKit mol object from its coordinate. In case of a charged system, the second line of the XYZ file must be formatted as to explicitly state it. For example, the second line of the XYZ file containing a positively charged system would be formatted as:
+If provided a system in the XYZ format, the model will rely on xyz2mol (https://github.com/jensengroup/xyz2mol) to obtain an RDKit mol object from its coordinate. In case of a charged system, the second line of the XYZ file must be formatted as to explicitly state it. For example, the second line of the XYZ file containing a positively charged system would be formatted as:
 ```
 charge=1=
 ```
 For more information on xyz2mol, please see the related article at DOI:10.1002/bkcs.10334
+For complexe systems or if it conatains multiple charges, using a SDF file is recommended ensure this program performs to the best of its ability, as this format ensures proper placement of charges or bonds, and can be used directly by RDKit without preprocessing by xyz2mol which represents the bottleneck of this code.
+
 
 ## Running the code.
 
