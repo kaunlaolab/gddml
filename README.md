@@ -14,9 +14,9 @@ For more information on xyz2mol, please see the related article at DOI:10.1002/b
 For complexe systems or if the system contains multiple charges, using a SDF file is recommended to ensure this program performs to the best of its ability. The SDF format ensures proper placement of charges or bonds, and can be used directly by RDKit without preprocessing by xyz2mol, which may represents the bottleneck of this code.
 
 
-## Running the code.
+## Running the code:
 
-This code requires a conda installation. Then install the environment using the .yml file contained within the directory:
+This code requires a number of packages available directly via conda. For simplicity, you may install a conda environment using the .yml file contained within the directory:
 ```
 conda env create -n YOUR_ENV_NAME -f environment.yml
 ```
@@ -28,3 +28,12 @@ Once the environment is installed, activate it and run the code:
  ```
  
  Note that the C60 molecule is given as example, but any path to an XYZ or SDF file will work.
+
+## Dependancies:
+'''
+- Numpy
+- RDKit
+- Scikit-learn
+- XGBoost
+- xyz2mol
+'''
