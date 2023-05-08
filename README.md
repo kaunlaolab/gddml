@@ -30,10 +30,10 @@ Once the environment is installed, activate it and run the code:
  Note that the C60 molecule is given as example, but any path to an XYZ or SDF file will work.
 
 ## Dependancies:
-'''
+```
 - Numpy
 - RDKit
 - Scikit-learn
 - XGBoost
 - xyz2mol
-'''
+```
