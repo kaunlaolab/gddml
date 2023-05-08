@@ -12,6 +12,10 @@ from rdkit.ML.Descriptors import MoleculeDescriptors
 from rdkit.Chem.EState.Fingerprinter import FingerprintMol
 import xyz2mol
 
+# Remove RDKit warnings
+from rdkit import RDLogger
+RDLogger.DisableLog('rdApp.*')
+
 path = str(Path(__file__).parent)
 
 
@@ -246,7 +250,7 @@ def gddml(xyz):
     model.load_model(path + "/gddml.json")
 
     features = scaler.transform(features)
-    gdd = int(round(model.predict(features)[0], 0)) * 0.001
+    gdd = '%.3f'%(round(model.predict(features)[0], 0) * 0.001)
 
     return name, gdd
 
