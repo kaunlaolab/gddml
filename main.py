@@ -1,20 +1,16 @@
 import sys
 from pathlib import Path
+import pickle
 
 import numpy as np
 import math
+import xgboost as xgb
 
 from rdkit.Chem import MACCSkeys
 from rdkit import Chem
 from rdkit.ML.Descriptors import MoleculeDescriptors
 from rdkit.Chem.EState.Fingerprinter import FingerprintMol
 import xyz2mol
-
-import joblib
-import warnings
-
-# Remove sklearn warning about features names (model was fitted using pandas DataFrame)
-warnings.filterwarnings("ignore", category=UserWarning)
 
 path = str(Path(__file__).parent)
 
@@ -230,7 +226,7 @@ def gddml(xyz):
         mol = Chem.MolFromMolFile(xyz, removeHs=False)
 
     else:
-        print('Please provide mol file in xyz or sdf format')
+        raise Exception('Please provide mol file in xyz or sdf format')
 
     # Get features
     rdkitfp = rdkit_features(mol)
@@ -241,11 +237,16 @@ def gddml(xyz):
     subfpc = get_SubFPC(mol)
 
     all_feat = rdkitfp | mu_feat | hodfp | estatefp | maccsfp | subfpc
-    df = np.array([[all_feat[x] for x in all_feat]])
+    features = np.array([[all_feat[x] for x in all_feat]])
 
-    #predict values
-    model = joblib.load(path + '/gddML.pkl')
-    gdd = int(round(model.predict(df)[0], 0)) * 0.001
+    #scale feature and predict values
+    with open(path+'/StandardScaler.pkl', 'rb') as file:
+        scaler = pickle.load(file)
+    model = xgb.XGBRegressor()
+    model.load_model(path + "/gddml.json")
+
+    features = scaler.transform(features)
+    gdd = int(round(model.predict(features)[0], 0)) * 0.001
 
     return name, gdd
 
