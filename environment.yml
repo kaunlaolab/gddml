@@ -1,4 +1,4 @@
-name: gddml2
+name: gddml
 channels:
   - conda-forge
   - defaults
