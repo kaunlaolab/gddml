@@ -1,6 +1,6 @@
 """Omega GDD ML
 
-This script allows the rapid description of the global density dependent 
+This script allows the rapid prediction of the global density dependent 
 range-separation paramter for the LRC-ωPBE DFT functional. It will generate
 the features used as input to the XGBoost model and return the predicted value
 of the parameter.
@@ -8,7 +8,7 @@ of the parameter.
 This tool accepts XYZ or SDF formatted files containing the molecular geometry.
 If an XYZ file is used, it will rely on xyz2mol to convert the system 
 to a RDKit mol object. The SDF file format is however recommended 
-in case of complexe systems to enusre proper placements of bonds and charge,
+in case of complexe systems to ensure proper placements of bonds and charge,
 or if this code runs for a seemingly long time.
 
 This script requires that numpy, RDKit, xyz2mol, scikit-learn and XGBoost
@@ -16,7 +16,7 @@ be installed within the Python environment you are running this script in.
 It also requires the Substructure_fingerprint.csv (Describe which substrucutre the
 SubustructreCOunt fingerprint will check), StandardScaler.pkl (saved scikit-learn 
 standard scaler fitted on training set) and gddml.json (saved XGBoost model fitted on
-training set) to be present within the same directory as this script. 
+training set) files to be present within the same directory as this script. 
 
 This file can also be imported as a module. In such case, the function gddml(),
 which takes as input the path to the molecular geometry file, may be used to return
