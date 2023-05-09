@@ -1,25 +1,49 @@
+"""Omega GDD ML
+
+This script allows the rapid description of the global density dependent 
+range-separation paramter for the LRC-ωPBE DFT functional. It will generate
+the features used as input to the XGBoost model and return the predicted value
+of the parameter.
+
+This tool accepts XYZ or SDF formatted files containing the molecular geometry.
+If an XYZ file is used, it will rely on xyz2mol to convert the system 
+to a RDKit mol object. The SDF file format is however recommended 
+in case of complexe systems to enusre proper placements of bonds and charge,
+or if this code runs for a seemingly long time.
+
+This script requires that numpy, RDKit, xyz2mol, scikit-learn and XGBoost
+be installed within the Python environment you are running this script in.
+It also requires the Substructure_fingerprint.csv (Describe which substrucutre the
+SubustructreCOunt fingerprint will check), StandardScaler.pkl (saved scikit-learn 
+standard scaler fitted on training set) and gddml.json (saved XGBoost model fitted on
+training set) to be present within the same directory as this script. 
+
+This file can also be imported as a module. In such case, the function gddml(),
+which takes as input the path to the molecular geometry file, may be used to return
+the predicted value for the range-separation parameter.
+"""
+
 import sys
 from pathlib import Path
 import pickle
+import math
 
 import numpy as np
-import math
 import xgboost as xgb
+import xyz2mol
 
 from rdkit.Chem import MACCSkeys
 from rdkit import Chem
 from rdkit.ML.Descriptors import MoleculeDescriptors
 from rdkit.Chem.EState.Fingerprinter import FingerprintMol
-import xyz2mol
-
 # Remove RDKit warnings
 from rdkit import RDLogger
 RDLogger.DisableLog('rdApp.*')
 
-path = str(Path(__file__).parent)
+PATH = str(Path(__file__).parent)
 
 
-def mu(n):
+def get_mu(n):
     """
     Obtain mu as described in paper.
     :param n: number of atoms in molecule
@@ -31,7 +55,7 @@ def mu(n):
 
 def rdkit_features(mol):
     """
-    obtain rdkit feature necessary for gdd prediction by XGBoost model
+    Obtain rdkit features necessary for gdd prediction by XGBoost model
     :param mol: RDKit mol object
     :return: dictionary containing RDKit features
     """
@@ -68,12 +92,12 @@ def rdkit_features(mol):
 
 def get_SubFPC(mol):
     """
-    Obtain Substructure Count Fingerprint
+    Obtain the SubstructureCount Fingerprint
     :param mol: RDKit mol object
-    :return: Dictionary of Subtructure fingerprint
+    :return: Dictionary of SubtructureCount fingerprint
     """
     subfp = {}
-    fingerprint = path + "/Substructure_fingerprint.csv"
+    fingerprint = PATH + "/Substructure_fingerprint.csv"
 
     with open(fingerprint, 'r') as fp:
         for sub in fp:
@@ -85,7 +109,7 @@ def get_SubFPC(mol):
 
 def get_EstateFP(mol):
     """
-    Obtain Estate0 fingerprint
+    Obtain Estate0 fingerprint.
     :param mol: RDKit mol object
     :return: Dictionary of Estate0 fingerprint
     """
@@ -125,7 +149,8 @@ def get_distance(a, b):
 
 def get_mol(mol):
     """
-    generate dictionary containing the atoms and coordinate of a molecule.
+    generate dictionary containing the atoms and coordinate of a molecule
+    from RDKit mol object.
     :param mol: RDKit mol object
     :return: dict_A (dictionary with atoms and coordinate of molecule)
 
@@ -140,7 +165,8 @@ def get_mol(mol):
 
 def get_pair_hod(m, x=0, y=10, n=2, atom_p='O-O'):
     """
-    Obtain histogram of distance for given atom pair. Bins are divided equally among the given range.
+    Obtain histogram of distance for given atom pair.
+    Bins are divided equally among the given range.
     :param m: RDKit mol object (see get_mol())
     :param x: start of histogram range
     :param y: end of histogram range
@@ -177,7 +203,7 @@ def get_pair_hod(m, x=0, y=10, n=2, atom_p='O-O'):
                 bins_d[bin2] = []
             for j in ind[0]:
                 c1 = 1 - ((np.array(hd_dict[pair][j]) - bin1) / bindis)
-                c2 = ((np.array(hd_dict[pair][j]) - bin1) / bindis)
+                c2 = (np.array(hd_dict[pair][j]) - bin1) / bindis
                 bins_d[bin1].append(c1)
                 bins_d[bin2].append(c2)
         for i in bins_d:
@@ -234,7 +260,7 @@ def gddml(xyz):
 
     # Get features
     rdkitfp = rdkit_features(mol)
-    mu_feat = {'mu': mu(len(mol.GetAtoms()))}
+    mu_feat = {'mu': get_mu(len(mol.GetAtoms()))}
     hodfp = get_hod(mol)
     estatefp = get_EstateFP(mol)
     maccsfp = get_MACCS(mol)
@@ -244,10 +270,10 @@ def gddml(xyz):
     features = np.array([[all_feat[x] for x in all_feat]])
 
     #scale feature and predict values
-    with open(path+'/StandardScaler.pkl', 'rb') as file:
+    with open(PATH+'/StandardScaler.pkl', 'rb') as file:
         scaler = pickle.load(file)
     model = xgb.XGBRegressor()
-    model.load_model(path + "/gddml.json")
+    model.load_model(PATH + "/gddml.json")
 
     features = scaler.transform(features)
     gdd = '%.3f'%(round(model.predict(features)[0], 0) * 0.001)
