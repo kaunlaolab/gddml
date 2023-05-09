@@ -1,4 +1,4 @@
-# $\mathrm(\omega)_{\rm GDD}^{\rm ML}$
+# $\mathrm{\omega}_{\rm GDD}^{\rm ML}$
 
 This machine learning model enables fast prediction of the range-separation parameter $\mathrm{\omega}_{\rm GDD}^{\rm ML}$ for the LRC-&omega;PBE functional. Given a molecular system in the form of a .xyz or .sdf file, this program will generate the features used by the model and return the predicted value for the parameter.
 
