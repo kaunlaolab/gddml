@@ -2,7 +2,7 @@
 
 This machine learning model enables fast prediction of the range-separation parameter $\mathrm{\omega}_{\rm GDD}^{\rm ML}$ for the LRC-&omega;PBE functional. Given a molecular system in the form of a .xyz or .sdf file, this program will generate the features used by the model and return the predicted value for the parameter.
 
-The details of this code can be found in the work of DOI: <span style="color: red"> to be published </span>
+The details of this code can be found in the work of DOI: [10.1063/5.0157340](https://doi.org/10.1063/5.0157340)
 
 
 If provided a system in the XYZ format, the model will rely on xyz2mol (https://github.com/jensengroup/xyz2mol) to obtain an RDKit mol object from its coordinate. In case of a charged system, the second line of the XYZ file must be formatted as to explicitly state it. For instance, the second line of the XYZ file containing a positively charged system would be formatted as:
